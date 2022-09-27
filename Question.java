@@ -1,47 +1,39 @@
 package com.company;
-import java.util.concurrent.ThreadLocalRandom;
 
-public class Question {
-    public int createIndex() { // Generates a random index for the answer and responses that will be displayed
-        return ThreadLocalRandom.current().nextInt(0, 3);
-    }
+import java.util.Arrays;
 
-    public int pickSingleOrMultipleChoice() { // Decides if it will be a single choice or multiple choice question 0/1
-        return ThreadLocalRandom.current().nextInt(0, 2);
+public class SimulationDriver {
 
-    };
+    public static void main(String[] args) {
 
-    // If the questionTypeNumber is 0, it generates a single choice question. If it is 1, it generates a multiple choice
-    // question
-    public String generateQuestion(int questionTypeNumber, int index) {
-        if(questionTypeNumber == 0) {
-            singleChoiceQuestion SCQuestion = new singleChoiceQuestion();
-
-            return SCQuestion.generateQuestion(index);
-
-        }
-        else if(questionTypeNumber == 1) {
-            multipleChoiceQuestion MCQuestion = new multipleChoiceQuestion();
-            return MCQuestion.generateQuestion(index);
-
-        }
-        return null;
-    }
-
-    // If the questionTypeNumber is 0, it generates a single choice responses result.
-    // If it is 1, it generates a multiple choice responses result
-    public String generateResponse(int questionTypeNumber, int index) {
-        if(questionTypeNumber == 0) {
-            singleChoiceQuestion SCQuestion = new singleChoiceQuestion();
-            return SCQuestion.generateResponses(index);
-
-        }
-
-        else if(questionTypeNumber == 1) {
-            multipleChoiceQuestion MCQuestion = new multipleChoiceQuestion();
-            return MCQuestion.generateResponses(index);
-        }
-        return null;
+        SimulationDriver SD = new SimulationDriver();
+        SD.configureQuestionAndResponse();
 
     }
+
+    public void configureQuestionAndResponse() {
+        Question question = new Question();
+        int questionAndResponseIndex = question.createIndex();
+        int singleOrMultipleChoiceIndex = question.pickSingleOrMultipleChoice();
+        String generatedQuestion = question.generateQuestion(singleOrMultipleChoiceIndex, questionAndResponseIndex);
+        String generatedResponses = question.generateResponse(singleOrMultipleChoiceIndex, questionAndResponseIndex);
+
+        Student student = new Student();
+        int[] studentAnswers = student.generateStudentAnswers();
+        String[] studentIDs = student.generateStudentIDs();
+
+        VotingService vs = new VotingService();
+        int[] vsStudentAnswers = vs.getStudentAnswers(studentAnswers);
+        String[] vsStudentIDs = vs.getStudentIDs(testIDs);
+        System.out.println(generatedQuestion);
+        System.out.println(generatedResponses);
+
+        System.out.println("Note: For true and false questions, indices 0 and 1 are True while indices 2 and 3 are false");
+        System.out.println("Student IDs: " + Arrays.toString(vsIDs));
+        System.out.println("Student answers: " + Arrays.toString(vsStudentAnswers));
+        System.out.println("iVote submission results: " + Arrays.toString(vsStudentAnswers));
+
+
+    }
+
 }
